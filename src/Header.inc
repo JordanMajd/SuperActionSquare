@@ -7,7 +7,8 @@
 .ENDME
 
 .ROMBANKSIZE $8000						; ROM banks are 32 KB in size.
-.ROMBANKS 8										; Tell WLA to use 8 ROM Banks - 2 Mbits.
+.ROMBANKS 8										; Tell WLA to use 8 ROM Banks - 2 Mbits
+.DEFINE HEADER_OFF	$8000			; Def header offset, used in InitSNES
 
 .SNESHEADER
 	ID "SNES"										; 1-4 letter string
@@ -38,6 +39,7 @@
 	NMI VBlank
 	RESET Start
 	IRQBRK EmptyHandler
+.ENDEMUVECTOR
 
 .BANK 0 SLOT 0								; Def ROM bank and slot it is in memory.
 .ORG 0												; .ORG 0 is $8000 bc slot starts at $8000
