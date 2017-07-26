@@ -6,9 +6,9 @@
 
 
 ;----------------------------------------------------------------------------
-; InitializeSNES -- my "standard" initialization of SNES memory and registers
+; InitSNES -- my "standard" initialization of SNES memory and registers
 ;----------------------------------------------------------------------------
-.MACRO InitializeSNES
+.MACRO InitSNES
   sei                     ;disable interrupts
   clc                     ;switch to native mode
   xce
@@ -28,10 +28,10 @@
 ;----------------------------------------------------------------------------
 
 .BANK 0 SLOT 0
-.ORG HEADER_OFF
-.SECTION "InitSNESCode" FORCE
+.ORG 0
+.SECTION "InitializeSNESCode" FORCE
 
-InitSNES:
+InitializeSNES:
   PHK			;set Data Bank = Program Bank
   PLB
 
@@ -44,6 +44,7 @@ InitSNES:
   STX $4374
 
   SEP #$20		; mem/A = 8 bit
+  REP #$10
 
   LDA #$8F
   STA $2100		;turn screen off for now, set brightness to normal
@@ -249,6 +250,7 @@ ClearPalette:
    STZ $2121
    LDX #$0100
 ClearPaletteLoop:
+   STZ $2122
    STZ $2122
    DEX
    BNE ClearPaletteLoop

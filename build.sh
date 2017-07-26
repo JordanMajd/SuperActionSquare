@@ -1,11 +1,17 @@
 #!/bin/bash
 
+# Name of main assembly file
+MAIN="Main"
+
+# Create link file
 echo '[objects]' > temp
-echo $1.obj >> temp
+echo Main.obj >> temp
 
-wla-65816 -o $1.obj $1.asm
-wlalink -v temp $1.smc
+# Avengers assemble!
+wla-65816 -o $MAIN.obj src/$MAIN.asm
+wlalink -v temp bin/$MAIN.smc
 
-rm $1.obj
+# Clean up build files
+rm $MAIN.obj
 rm temp
 

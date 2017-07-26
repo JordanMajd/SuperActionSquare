@@ -7,8 +7,7 @@
 .ENDME
 
 .ROMBANKSIZE $8000						; ROM banks are 32 KB in size.
-.ROMBANKS 8										; Tell WLA to use 8 ROM Banks - 2 Mbits
-.DEFINE HEADER_OFF	$8000			; Def header offset, used in InitSNES
+.ROMBANKS 8	
 
 .SNESHEADER
 	ID "SNES"										; 1-4 letter string
@@ -19,24 +18,25 @@
 	LOROM
 
 	CARTRIDGETYPE $00						; $00 = ROM only, see WLA docs.
-	ROMSIZE $80									;	$08 = 2 Mbits, see WLA docs.
+	ROMSIZE $08									;	$08 = 2 Mbits, see WLA docs.
 	SRAMSIZE $00								; NO SRAM, see WLA docs.
 	COUNTRY $01									; $01 = US, $00 = Japan.
 	LICENSEECODE $00						;
+	VERSION $00									; $00 = 1.00, $01 = 1.01
 .ENDSNES
 
 .SNESNATIVEVECTOR							; Def Native Mode interrupt vector table.
 	COP EmptyHandler
 	BRK EmptyHandler
 	ABORT EmptyHandler
-	NMI VBlank
+	NMI EmptyHandler
 	IRQ EmptyHandler
 .ENDNATIVEVECTOR
 
 .SNESEMUVECTOR								; Def Emu Mode interrupt vector table.
 	COP EmptyHandler
 	ABORT EmptyHandler
-	NMI VBlank
+	NMI EmptyHandler
 	RESET Start
 	IRQBRK EmptyHandler
 .ENDEMUVECTOR
