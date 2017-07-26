@@ -4,7 +4,7 @@ Super Action Square is the most anticipated up and coming title of the criticall
 
 # Getting Started
 
-1. Install [WLA-DX](https://github.com/vhelin/wla-dx)
+1. Install [WLA-DX](https://github.com/vhelin/wla-dx).
 1. Clone the repository.
 1. Navigate into the cloned directory.
 1. Run `build.sh`.
