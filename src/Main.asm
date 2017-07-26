@@ -1,7 +1,7 @@
 ;== Main.asm ==
 ; Includes
 .INCLUDE "Header.inc"
-.INCLUDE "SnesINIT.asm"
+.INCLUDE "InitSNES.asm"
 
 ;== Start Start ==
 
