@@ -3,6 +3,10 @@
 # Name of main assembly file
 MAIN="Main"
 
+# Create & clean bin directory
+mkdir -p bin
+rm -r bin/*
+
 # Create link file
 echo '[objects]' > temp
 echo Main.obj >> temp
