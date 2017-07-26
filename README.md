@@ -1,8 +1,6 @@
 # Super Action Square
 
-This is the SNES version of Action Square written in 65816 assembly.
-
-It mostly follows [Bazz's Tutorialz](https://wiki.superfamicom.org/snes/show/Setting+Up+a+Programming+Environment) right now. As time goes on it will diverge and become its own creation.
+Super Action Square is the most anticipated up and coming title of the critically acclaimed Action Square franchise. It brings the thrilling action fans have come to expect of the series to the SNES and is written entirely in 65816 assembly.
 
 # Getting Started
 
