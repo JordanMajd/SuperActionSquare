@@ -13,7 +13,7 @@ Start:
 	InitSNES
 
 	stz $2121		; Screen color, write in binary or hex.
-	lda #$1F		; = 00011111
+	lda #$F0		; = 00011111
 	sta $2122
 	stz $2122		; second byte has no data so write 0.
 
