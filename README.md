@@ -12,7 +12,7 @@ Super Action Square is the most anticipated up and coming title of the criticall
 
 # Roadmap
 
-1. Follow Bazz's tutorials to learn the platform.
+1. Follow several tutorials, learn the hardware and software.
 1. Create a compelling storyline and immersive gameplay mechanics that has become central to the Action Square franchise.
 1. ???????
 1. Profit.
