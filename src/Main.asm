@@ -1,13 +1,13 @@
 .INCLUDE "Header.inc"
-.INCLUDE "InitSNES.asm"
+.INCLUDE "Init.asm"
 
 .BANK 0 SLOT 0
 .ORG 0
 .SECTION "MainCode"
 
 Start:
-	InitSNES
-	
+	InitSystem	; Initialize Macro
+
 							; Force VBlank
 	LDA #$80		; = 10000000
 	STA $2100		; Turn off screen using the Screen Display Register.
