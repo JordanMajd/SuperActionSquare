@@ -5,7 +5,7 @@ MAIN="Main"
 
 # Create & clean bin directory
 mkdir -p bin
-rm -r bin/*
+rm bin/*
 
 # Create link file
 echo '[objects]' > temp
