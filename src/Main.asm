@@ -5,6 +5,9 @@
 .ORG 0
 .SECTION "MainCode"
 
+VBlank:
+	RTI
+
 Start:
 	InitSystem	; Initialize Macro
 
