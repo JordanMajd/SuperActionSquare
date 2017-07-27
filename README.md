@@ -22,6 +22,7 @@ Super Action Square is the most anticipated up and coming title of the criticall
 Thanks to everyone who has shared their knowledge and everyone in the SNES hacking community.
 
 - Bazz
+- Midfit
 - Neviksti
 
 # License
