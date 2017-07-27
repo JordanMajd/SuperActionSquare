@@ -2,6 +2,8 @@
 
 Super Action Square is the most anticipated up and coming title of the critically acclaimed Action Square franchise. It brings the thrilling action fans have come to expect of the series to the SNES and is written entirely in 65816 assembly.
 
+![Super Action Square Screenshot](/doc/res/superactionsquare.png)
+
 # Getting Started
 
 1. Install [WLA-DX](https://github.com/vhelin/wla-dx).
