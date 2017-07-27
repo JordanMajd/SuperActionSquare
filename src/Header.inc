@@ -1,5 +1,5 @@
-; START HEADER
-;==LoRom==
+; LoRom Header
+
 .MEMORYMAP										;	Begin describing the system arch.
 	SLOTSIZE $8000							;	The slot is $8000 bytes in size.
 	DEFAULTSLOT 0								; The SNES only has one slot.
@@ -17,19 +17,19 @@
 	SLOWROM
 	LOROM
 
-	CARTRIDGETYPE $00						; $00 = ROM only, see WLA docs.
-	ROMSIZE $08									;	$08 = 2 Mbits, see WLA docs.
-	SRAMSIZE $00								; NO SRAM, see WLA docs.
-	COUNTRY $01									; $01 = US, $00 = Japan.
+	CARTRIDGETYPE $00						; $00 = ROM only
+	ROMSIZE $08									;	$08 = 2 Mbits
+	SRAMSIZE $00								; NO SRAM
+	COUNTRY $01									; US
 	LICENSEECODE $00						;
-	VERSION $00									; $00 = 1.00, $01 = 1.01
+	VERSION $00									; 1.00
 .ENDSNES
 
 .SNESNATIVEVECTOR							; Def Native Mode interrupt vector table.
 	COP EmptyHandler
 	BRK EmptyHandler
 	ABORT EmptyHandler
-	NMI EmptyHandler
+	NMI EmptyHandler						; TODO later implement VBlank
 	IRQ EmptyHandler
 .ENDNATIVEVECTOR
 
@@ -37,7 +37,7 @@
 	COP EmptyHandler
 	ABORT EmptyHandler
 	NMI EmptyHandler
-	RESET Start
+	RESET Start									; Execution starts at Start
 	IRQBRK EmptyHandler
 .ENDEMUVECTOR
 
@@ -46,10 +46,8 @@
 .SECTION "EmptyVectors" SEMIFREE
 
 EmptyHandler:
-	rti
+	RTI
 .ENDS
 
 .EMPTYFILL $00
-
-; END HEADER
 
