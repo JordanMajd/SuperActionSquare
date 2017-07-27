@@ -29,7 +29,7 @@
 	COP EmptyHandler
 	BRK EmptyHandler
 	ABORT EmptyHandler
-	NMI EmptyHandler						; TODO later implement VBlank
+	NMI VBlank
 	IRQ EmptyHandler
 .ENDNATIVEVECTOR
 
