@@ -21,10 +21,8 @@ Super Action Square is the most anticipated up and coming title of the criticall
 
 Thanks to everyone who has shared their knowledge and everyone in the SNES hacking community.
 
-Special thanks go out to:
-
-- Bazz, for kickass tutorials.
-- Neviksti, for all his know how and his `InitSnes.asm`
+- Bazz
+- Neviksti
 
 # License
 
