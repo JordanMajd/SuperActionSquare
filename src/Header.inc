@@ -12,7 +12,7 @@
 .SNESHEADER
 	ID "SNES"										; 1-4 letter string
 
-	NAME "Name of Program     "	;	21 byte program title.
+	NAME "Super Action Square  ";	21 byte program title.
 
 	SLOWROM
 	LOROM

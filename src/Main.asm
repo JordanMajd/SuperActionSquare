@@ -8,7 +8,6 @@
 Start:
 	InitSNES
 	
-
 							; Force VBlank
 	LDA #$80		; = 10000000
 	STA $2100		; Turn off screen using the Screen Display Register.
