@@ -21,15 +21,6 @@ Here is a screenshot of the latest build:
 1. ???????
 1. Profit.
 
-# Credits
-
-Thanks to everyone who has shared their knowledge and everyone in the SNES hacking community.
-
-- Bazz
-- Midfit
-- Neviksti
-
 # License
 
 This project is Licensed under an MIT License. See [LICENSE](/LICENSE) for more information.
-
