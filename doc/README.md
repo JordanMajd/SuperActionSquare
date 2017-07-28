@@ -2,25 +2,11 @@
 
 Here is where I will keep my development notes. As the project evolves so will this document.
 
-## Assembly Instructions
+## Table of Contents
 
-## Hardware Registers
-
-- Screen Display Register
-	- $2100
-
-- Color Selection Register
-	- $2121
-	-	Contains address for Color #.
-
-- Color Data Register
-	- $2122
-	- Contains Value of Color.
-		- Color is 16-bit (0bbbbbgggggrrrrr)
-		- Split into 2 bytes:
-			- Low byte (0bbbbbgg)
-			- High byte (gggrrrrr)
-		- EX: 0000001111111111 or $04FF is blue.
-
-
-
+1. [Table of Content](./README.md)
+1. [Header](./header.md)
+1. [Init](./header.md)
+1. [65816 Reference](./65816_reference.md)
+1. [Register Reference](./register_reference.md)
+1. [Resources](./resources.md)
