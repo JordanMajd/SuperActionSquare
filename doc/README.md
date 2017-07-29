@@ -5,6 +5,7 @@ Here is where I will keep my development notes. As the project evolves so will t
 ## Table of Contents
 
 1. [Table of Content](./README.md)
+1. [Design Overview][./design.md]
 1. [Header](./header.md)
 1. [Init](./header.md)
 1. [65816 Reference](./65816_reference.md)
