@@ -27,3 +27,9 @@ Forever:
 	JMP Forever
 
 .ENDS
+
+.BANK 1
+.ORG 0
+.SECTION "TileData"
+	.INCLUDE "Tiles.inc"
+.ENDS
