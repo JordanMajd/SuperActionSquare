@@ -10,12 +10,7 @@ VBlank:
 
 Start:
 	InitSystem	; Initialize Macro
-
-							; Force VBlank
-	LDA #$80		; = 10000000
-	STA $2100		; Turn off screen using the Screen Display Register.
-
-							; Color is 16-bit, 0bbbbbgggggrrrrr.
+							; DOCS: Color is 16-bit, 0bbbbbgggggrrrrr. [JM]
 							; Split into 2 bytes, low byte(0bbbbbgg) and high byte (gggrrrrr).
 	LDA #$04		; Load a color for the low byte.
 	STA $2122		; Store low byte in Color Data Register.
@@ -29,4 +24,3 @@ Forever:
 	JMP Forever
 
 .ENDS
-

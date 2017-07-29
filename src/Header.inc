@@ -7,7 +7,7 @@
 .ENDME
 
 .ROMBANKSIZE $8000						; ROM banks are 32 KB in size.
-.ROMBANKS 8	
+.ROMBANKS 8
 
 .SNESHEADER
 	ID "SNES"										; 1-4 letter string
@@ -36,7 +36,7 @@
 .SNESEMUVECTOR								; Def Emu Mode interrupt vector table.
 	COP EmptyHandler
 	ABORT EmptyHandler
-	NMI EmptyHandler
+	NMI VBlank
 	RESET Start									; Execution starts at Start
 	IRQBRK EmptyHandler
 .ENDEMUVECTOR
@@ -50,4 +50,3 @@ EmptyHandler:
 .ENDS
 
 .EMPTYFILL $00
-
