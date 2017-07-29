@@ -13,7 +13,8 @@ This serves as a overview of how the program will flow.
 1. Initialize
   - Disable Interrupts
   - Switch To Native Mode
-  - Switch to 16 bit mode
+  - Switch to 16 bit XY, turn decimal off
+  - Switch to 8 bit AXY
   - Force VBlank
   - Clear registers
 1. Main Program
