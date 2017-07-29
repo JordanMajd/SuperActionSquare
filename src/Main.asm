@@ -5,6 +5,33 @@
 .ORG 0
 .SECTION "MainCode"
 
+.MACRO LoadPalette
+
+	STZ $2100
+	LDA #:UntitledData	; Bank address
+	LDX #UntitledData		; Bank offset
+	LDY #(15*16*2)			; Bank length
+
+	JSR DMAPalette
+.ENDM
+
+DMAPalette:
+
+											; TODO: Preserve registers? [JM]
+  STA	$4304						; Store data offset into DMA offset
+  STX	$4302						; Store databank into DMA source bank
+	STY	$4305						; Store size of data block DMA
+
+	STZ $4300						; Set DMA mode
+	LDA #$22						; Set dest register ($2122 - CGRAM write)
+	STA $4301
+	LDA #$01						; Init DMA transfer
+	STA $420B
+
+	RTS
+
+.ENDS
+
 VBlank:
 	RTI
 
@@ -12,6 +39,8 @@ Start:
 	InitSystem	; Initialize Macro
 							; DOCS: Color is 16-bit, 0bbbbbgggggrrrrr. [JM]
 							; Split into 2 bytes, low byte(0bbbbbgg) and high byte (gggrrrrr).
+
+  LoadPalette
 
 							; TODO: Set Acc to 8 bit?[JM]
 
@@ -23,10 +52,9 @@ Start:
 	LDA #$0F		; = 00001111
 	STA $2100		; Turn on screen using the Screen Display Register.
 
+
 Forever:
 	JMP Forever
-
-.ENDS
 
 .BANK 1
 .ORG 0
