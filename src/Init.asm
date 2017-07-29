@@ -6,9 +6,8 @@
 	CLC								; 1. Clear carry flag.
 	XCE								; 2. Exchange carry with emulation
 
-										; TODO: is this overriding the emulation bit? [JM]
-										; Set A, X, Y to 16 bit, decimal mode off.
-	REP #$38					; Reset Flag (REP) clears bits specified in the operands of the flag.
+										; TODO: Is a starting 8 or 16 bits? [JM]
+	REP #$18					; =00011000. Set X, Y to 16 bit, decimal mode off.
 
 	JSR Init
 
@@ -18,6 +17,8 @@
 .ORG 0
 .SECTION "InitializeSystem" FREE ; See FREE, SEMIFREE and FORCE in WLA docs
 Init:
+	SEP #$30					; =0011000. Set A, X, Y to 8 bit.
+
 	LDA #$8F					; Force VBlank
 	STA $2100					; DOCS: See 2-27-1 for $2100 PPU Reg [JM]
 
@@ -54,8 +55,8 @@ Init:
 	STZ $2114
 	STZ $2114
 
-	;LDA #$80
-	;STA $2115
+	LDA #$80
+	STA $2115
 
 	STZ $2116
 	STZ $2117
@@ -63,22 +64,26 @@ Init:
 	;STZ $2118					; TODO: VRAM Data? [kmw]
 	;STZ $2119					; TODO: VRAM Data? [kmw]
 
+
+
 	STZ $211A
 
-	;LDA #$00					; TODO: Is the low/high byte backwards? [JM]
-	;STA $211B
-	;LDA #$01
-	;STA $211B
+	; Good to here
+
+	STZ $211B				; TODO: Is the low/high byte backwards? [JM]
+	LDA #$01
+	STA $211B
+
+	; Broke here
 
 	STZ $211C
 	STZ $211C
-	STZ $211C
-	STZ $211C
+	STZ $211D
+	STZ $211D
 
-	;LDA #$00					; TODO: Is the low/high byte backwards? [JM]
-	;STA $211E
-	;LDA #$01
-	;STA $211E
+	STZ $211E				; TODO: Is the low/high byte backwards? [JM]
+	LDA #$01
+	STA $211E
 
 	STZ $211F
 	STZ $211F
@@ -103,8 +108,8 @@ Init:
 	STZ $212D
 	STZ $212E
 
-	;LDA #$30
-	;STA $2130
+	LDA #$30
+	STA $2130
 
 	STZ $2131
 
@@ -114,8 +119,8 @@ Init:
 	STZ $2133
 	STZ $4200
 
-	;LDA #$FF
-	;STA $4201
+	LDA #$FF
+	STA $4201
 
 	STZ $4202
 	STZ $4203

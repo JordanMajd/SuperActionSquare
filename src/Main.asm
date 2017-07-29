@@ -12,6 +12,9 @@ Start:
 	InitSystem	; Initialize Macro
 							; DOCS: Color is 16-bit, 0bbbbbgggggrrrrr. [JM]
 							; Split into 2 bytes, low byte(0bbbbbgg) and high byte (gggrrrrr).
+
+							; TODO: Set Acc to 8 bit?[JM]
+
 	LDA #$04		; Load a color for the low byte.
 	STA $2122		; Store low byte in Color Data Register.
 	LDA #$FF		; Load a color for the high byte.
