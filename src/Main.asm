@@ -7,20 +7,17 @@
 ; ========
 ; Macros
 ; ========
-
 .MACRO LoadPalette
 	LDA #\2
 	STA $2121
 	LDA #:\1					; Bank address
 	LDX #\1						; Bank offset
-	LDY #(\3 * 2)				; Bank length
+	LDY #(\3 * 2)			; Bank length
 
 	JSR DMAPalette
 .ENDM
 
 .MACRO LoadBlockToVRAM
-	;LDA #$80					; = 10000000
-	;STA $2115				; Init video port control reg, inc by 1
 
 	LDX #\2					; Initial address for upload
 	STX $2116					; Set dest in VRAM Addr Reg
@@ -48,7 +45,7 @@ Start:
 	STA $2115					; Init video port control reg, inc by 1
 
 	LDX #$0400				; Tile location
-	LDX $2116 				; VRAM Addr Reg
+	STX $2116 				; VRAM Addr Reg
 
 	LDA #$01
 	STA $2118 				;	VRAM data write reg
@@ -58,33 +55,6 @@ Start:
 Forever:
 	JMP Forever
 
-DMAPalette:
-  STX	$4302						; Store databank into DMA source bank
-	STA	$4304						; Store data offset into DMA offset
-	STY	$4305						; Store size of data block DMA
-
-											; #$00 = Byte, normal increment.
-	STZ $4300						; Set DMA mode
-	LDA #$22						; Set dest CGRAM reg ($22 = $2122)
-	STA $4301
-	LDA #$01						; Set DMA channel
-	STA $420B						; Init DMA transfer
-
-	RTS
-
-LoadVRAM:
-	STX	$4302						; Store databank into DMA source bank
-	STA	$4304						; Store data offset into DMA offset
-	STY	$4305						; Store size of data block DMA
-
-	LDA #$01						; #$01 = Word, normal increment.
-	STA $4300						; Set DMA mode
-	LDA #$18						; Set dest VRAM data write reg ($18 = $2118)
-	STA $4301
-	LDA #$01						; Set DMA channel
-	STA $420B						; Init DMA transfer
-
-	RTS
 
 SetupVideo:
 	LDA #$00
@@ -107,8 +77,34 @@ SetupVideo:
 
 	RTS
 
-VBlank:
-	RTI
+
+LoadVRAM:
+	STX	$4302						; Store databank into DMA source bank
+	STA	$4304						; Store data offset into DMA offset
+	STY	$4305						; Store size of data block DMA
+
+	LDA #$01						; #$01 = Word, normal increment.
+	STA $4300						; Set DMA mode
+	LDA #$18						; Set dest VRAM data write reg ($18 = $2118)
+	STA $4301
+	LDA #$01						; Set DMA channel
+	STA $420B						; Init DMA transfer
+
+	RTS
+
+DMAPalette:
+  STX	$4302						; Store databank into DMA source bank
+	STA	$4304						; Store data offset into DMA offset
+	STY	$4305						; Store size of data block DMA
+
+											; #$00 = Byte, normal increment.
+	STZ $4300						; Set DMA mode
+	LDA #$22						; Set dest CGRAM reg ($22 = $2122)
+	STA $4301
+	LDA #$01						; Set DMA channel
+	STA $420B						; Init DMA transfer
+
+	RTS
 
 .ENDS
 
@@ -117,6 +113,6 @@ VBlank:
 ; ========
 .BANK 1 SLOT 0
 .ORG 0
-.SECTION "TileData"
+.SECTION "CharacterData"
 	.INCLUDE "Tiles.inc"
 .ENDS
