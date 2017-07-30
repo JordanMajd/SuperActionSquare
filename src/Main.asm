@@ -18,7 +18,7 @@
 .ENDM
 
 .MACRO LoadBlockToVRAM
-	LDX #\2					; Initial address for upload
+	LDX #\2						; Initial address for upload
 	STX $2116					; Set dest in VRAM Addr Reg
 
 	LDA #:\1					; Bank address
@@ -37,8 +37,14 @@
 
 Start:
 	InitSystem
-	LoadPalette BG_Palette, 0, 4
+
+	LoadPalette BGPalette, 0, 4
+	LoadPalette SpritePalette, 128, 16
+
 	LoadBlockToVRAM Tiles, $0000, $0020
+	LoadBlockToVRAM Sprite, $0020, $0820
+
+	JSR SetupSprites
 
 	LDA #$80					; = 10000000
 	STA $2115					; Init video port control reg, inc by 1
@@ -77,7 +83,7 @@ SetupVideo:
 
 	LDA #$F0						; Vertical BG Scroll? [JM]
 	STA $210E
-	LDA #$00					; Horizontal BG Scroll? [JM]
+	LDA #$00						; Horizontal BG Scroll? [JM]
 	STA $210E
 
 	LDA #$0F						; = 00001111
@@ -85,6 +91,8 @@ SetupVideo:
 
 	RTS
 
+SetupSprites:					; TODO: Set all sprites offscreen [JM]
+	RTS
 
 LoadVRAM:
 	STX	$4302						; Store databank into DMA source bank
@@ -133,5 +141,13 @@ VBlank
 .BANK 1 SLOT 0
 .ORG 0
 .SECTION "TileData"
+
 	.INCLUDE "Tiles.inc"
+
+Sprite:
+	.INCBIN "biker.pic"
+
+SpritePalette:
+	.INCBIN "biker.clr"
+
 .ENDS

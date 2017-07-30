@@ -4,7 +4,7 @@ Tiles:
     ; Action Square
     .db $00, $FF, $00, $81, $00, $81, $00, $81, $00, $81, $00, $81, $00, $81, $00, $FF
 
-BG_Palette:
+BGPalette:
     ;Color 0 = Black
     ;Color 1 = Blue
     ;Color 2 = Green
