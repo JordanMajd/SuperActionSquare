@@ -66,8 +66,9 @@ SetupVideo:
 	LDA #$01
 	STA $212C						; Enable BG1
 
-	LDA #$FF						;TODO BG1 scroll registers? [JM]
+	LDA #$F0						; Vertical BG Scroll? [JM]
 	STA $210E
+	LDA #$00						; Horizontal BG Scroll? [JM]
 	STA $210E
 
 	LDA #$0F		; = 00001111
@@ -103,6 +104,9 @@ DMAPalette:
 	STA $420B						; Init DMA transfer
 
 	RTS
+
+VBlank
+	RTI
 .ENDS
 
 ; ========

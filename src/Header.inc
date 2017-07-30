@@ -29,14 +29,14 @@
 	COP EmptyHandler
 	BRK EmptyHandler
 	ABORT EmptyHandler
-	NMI EmptyHandler
+	NMI VBlank
 	IRQ EmptyHandler
 .ENDNATIVEVECTOR
 
 .SNESEMUVECTOR								; Def Emu Mode interrupt vector table.
 	COP EmptyHandler
 	ABORT EmptyHandler
-	NMI EmptyHandler
+	NMI VBlank
 	RESET Start									; Execution starts at Start
 	IRQBRK EmptyHandler
 .ENDEMUVECTOR
