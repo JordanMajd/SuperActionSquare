@@ -1,5 +1,7 @@
+; ========
+; Macros
+; ========
 .MACRO InitSystem
-
 	SEI								; Set interrupt disable flag.
 
 										; SNES boots in 6502 emulation mode.
@@ -11,14 +13,15 @@
 	REP #$18					; = 00011000. Set X, Y to 16 bit, decimal mode off.
 
 	JSR Init
-
 .ENDM
 
+; ========
+; Init
+; ========
 .BANK 0 SLOT 0
 .ORG 0
 .SECTION "InitializeSystem" FREE		; DOCS: See FREE, SEMIFREE and FORCE in WLA docs
 Init:
-
 	PHP								; Push processor status register
 
 	SEP #$30					; = 00110000. Set A, X, Y to 8 bit.

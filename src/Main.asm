@@ -41,8 +41,6 @@ Forever:
 	JMP Forever
 
 DMAPalette:
-	 										;TODO: Preserve registers? [JM]
-
   STA	$4304						; Store data offset into DMA offset
   STX	$4302						; Store databank into DMA source bank
 	STY	$4305						; Store size of data block DMA
