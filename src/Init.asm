@@ -1,4 +1,5 @@
 .MACRO InitSystem
+
 	SEI								; Set interrupt disable flag.
 
 										; SNES boots in 6502 emulation mode.
@@ -6,7 +7,7 @@
 	CLC								; 1. Clear carry flag.
 	XCE								; 2. Exchange carry with emulation
 
-										; TODO: Is a starting 8 or 16 bits? [JM]
+	SEP	#$20					; = 00100000. Set A to 8 bit.
 	REP #$18					; = 00011000. Set X, Y to 16 bit, decimal mode off.
 
 	JSR Init
@@ -17,6 +18,9 @@
 .ORG 0
 .SECTION "InitializeSystem" FREE ; See FREE, SEMIFREE and FORCE in WLA docs
 Init:
+
+	PHP								; Push processor status register
+
 	SEP #$30					; = 00110000. Set A, X, Y to 8 bit.
 
 	LDA #$8F					; Force VBlank
@@ -27,7 +31,7 @@ Init:
 	STZ $2102
 	STZ $2103
 
-	;STZ $2104					; TODO: OAM Data? [kmw]
+	;STZ $2104				; TODO: OAM Data? [kmw]
 
 	STZ $2105
 	STZ $2106
@@ -61,27 +65,21 @@ Init:
 	STZ $2116
 	STZ $2117
 
-	;STZ $2118					; TODO: VRAM Data? [kmw]
-	;STZ $2119					; TODO: VRAM Data? [kmw]
-
-
+	;STZ $2118				; TODO: VRAM Data? [kmw]
+	;STZ $2119				; TODO: VRAM Data? [kmw]
 
 	STZ $211A
 
-	; Good to here
-
-	STZ $211B						; TODO: Is the low/high byte backwards? [JM]
+	STZ $211B					; TODO: Is the low/high byte backwards? [JM]
 	LDA #$01
 	STA $211B
 
-	; Broke here
-
 	STZ $211C
 	STZ $211C
 	STZ $211D
 	STZ $211D
 
-	STZ $211E						; TODO: Is the low/high byte backwards? [JM]
+	STZ $211E					; TODO: Is the low/high byte backwards? [JM]
 	LDA #$01
 	STA $211E
 
@@ -93,7 +91,7 @@ Init:
 
 	STZ $2121
 
-	;STZ $2122					; TODO: CG Data? [JM]
+	;STZ $2122				; TODO: CG Data? [JM]
 
 	STZ $2123
 	STZ $2124
@@ -135,8 +133,7 @@ Init:
 	STZ $420C
 	STZ $420D
 
-	SEP	#$20							; = 00100000. Set A to 8 bit.
-	REP #$10 							; = 00010000. Set X, Y to 16 bit.
+	PLP								; Pull processor status register
 
 	RTS
 .ENDS
