@@ -38,11 +38,11 @@
 Start:
 	InitSystem
 
-	;LoadPalette BGPalette, 0, 4
+	LoadPalette BGPalette, 0, 4
 	LoadPalette SpritePalette, 128, 16
 
-	;LoadBlockToVRAM Tiles, $0000, $0020
-	LoadBlockToVRAM Sprite, $0000, $0800
+	LoadBlockToVRAM Tiles, $0000, $0020
+	LoadBlockToVRAM Sprite, $0800, $0820
 
 	JSR SetupSprites
 
@@ -52,7 +52,7 @@ Start:
 	LDA #(224 / 2 - 16)		; Screen / 2 - half sprite
 	STA $1001							; Sprite Y coord
 
-	;WTF DO THESE LINES DO
+										;TODO: What do these do, didn't work without [JM]
 	stz $0002
 	lda #%01110000
 	sta $0003
@@ -60,7 +60,7 @@ Start:
 	LDA #$54					; Clear
 	STA $0200					; Sprite X- MSB
 										; End draw sprite 1 to middle of screen
-/*
+
 										; Draw BG1 tile to screen
 										; TODO: Replace with Tilemap? [JM]
 	LDA #$80					; = 10000000
@@ -72,7 +72,7 @@ Start:
 	LDA #$01
 	STA $2118 				;	VRAM data write reg
 										; End Draw BG1 tile to screen
-*/
+
 	JSR SetupVideo
 
 	LDA #$80					; Enable NMI
@@ -92,7 +92,7 @@ Forever:
 	JMP Forever
 
 SetupVideo:
-/*
+
 	STZ $2105						; Set video mode
 
 	LDA #$04						; BG1s starting tile address ($0400)
@@ -109,12 +109,12 @@ SetupVideo:
 	STA $210D
 	LDA #$00
 	STA $210D
-*/
+
 											; DMA sprite data from RAM to OAM
 											; TODO: Macro or subroutine? [JM]
 											; TODO: Split writes into two lines to be explicit? [JM]
   LDY #$0400					; Write $00 to $4300 & $04 to $4301
-	STY $4300						; CPU -> PPU, auto inc to $2104 (OAM Write reg)
+	STY $4300						; Set DMA Mode, dest PPU, auto inc
 	STZ $4302						; DMA source bank
 	STZ $4303
 
@@ -130,8 +130,7 @@ SetupVideo:
 	LDA #$A0
 	STA $2101						; Use 32x32 sprites
 
-	;LDA #$11						; Enable BG1 & Sprites
-	LDA #$10						; Enable Sprites
+	LDA #$11						; Enable BG1 & Sprites
 	STA $212C
 
 	LDA #$0F						; = 00001111
@@ -215,6 +214,8 @@ VBlank
 .BANK 1 SLOT 0
 .ORG 0
 .SECTION "TileData"
+
+	.INCLUDE "Tiles.inc"
 
 Sprite:
 	.INCBIN "biker.pic"
