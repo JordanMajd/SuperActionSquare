@@ -9,7 +9,7 @@ rm bin/*
 
 # Create link file
 echo '[objects]' > temp
-echo Main.obj >> temp
+echo $MAIN.obj >> temp
 
 # Avengers assemble!
 wla-65816 -I src -o $MAIN.obj src/$MAIN.asm

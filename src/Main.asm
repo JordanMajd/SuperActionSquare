@@ -7,13 +7,29 @@
 ; ========
 ; Macros
 ; ========
-.MACRO LoadPalette	; TODO: Take in arguments? [JM]
-	STZ $2100
-	LDA #:BG_Palette	; Bank address
-	LDX #BG_Palette		; Bank offset
-	LDY #(4*2)				; Bank length
+
+.MACRO LoadPalette
+	LDA #\2
+	STA $2121
+	LDA #:\1					; Bank address
+	LDX #\1						; Bank offset
+	LDY #(\3 * 2)				; Bank length
 
 	JSR DMAPalette
+.ENDM
+
+.MACRO LoadBlockToVRAM
+	;LDA #$80					; = 10000000
+	;STA $2115				; Init video port control reg, inc by 1
+
+	LDX #\2					; Initial address for upload
+	STX $2116					; Set dest in VRAM Addr Reg
+
+	LDA #:\1					; Bank address
+	LDX #\1						; Bank offset
+	LDY #\3						; Bank size (8 * color_depth(in bits) * number_of_characters)
+
+	JSR LoadVRAM
 .ENDM
 
 ; ========
@@ -25,31 +41,69 @@
 
 Start:
 	InitSystem
-	LoadPalette
+	LoadPalette BG_Palette, 0, 4
+	LoadBlockToVRAM Tiles, $0000, $0020
 
-							; DOCS: Color is 16-bit, 0bbbbbgggggrrrrr. [JM]
-							; Split into 2 bytes, low byte(0bbbbbgg) and high byte (gggrrrrr).
-	LDA #$04		; Load a color for the low byte.
-	STA $2122		; Store low byte in Color Data Register.
-	LDA #$FF		; Load a color for the high byte.
-	STA $2122		; Store high byte in Color Data Register.
+	LDA #$80					; = 10000000
+	STA $2115					; Init video port control reg, inc by 1
 
-	LDA #$0F		; = 00001111
-	STA $2100		; Turn on screen using the Screen Display Register.
+	LDX #$0400				; Tile location
+	LDX $2116 				; VRAM Addr Reg
+
+	LDA #$01
+	STA $2118 				;	VRAM data write reg
+
+	JSR SetupVideo
 
 Forever:
 	JMP Forever
 
 DMAPalette:
-  STA	$4304						; Store data offset into DMA offset
   STX	$4302						; Store databank into DMA source bank
+	STA	$4304						; Store data offset into DMA offset
 	STY	$4305						; Store size of data block DMA
 
+											; #$00 = Byte, normal increment.
 	STZ $4300						; Set DMA mode
 	LDA #$22						; Set dest CGRAM reg ($22 = $2122)
 	STA $4301
-	LDA #$01						; Init DMA transfer
-	STA $420B
+	LDA #$01						; Set DMA channel
+	STA $420B						; Init DMA transfer
+
+	RTS
+
+LoadVRAM:
+	STX	$4302						; Store databank into DMA source bank
+	STA	$4304						; Store data offset into DMA offset
+	STY	$4305						; Store size of data block DMA
+
+	LDA #$01						; #$01 = Word, normal increment.
+	STA $4300						; Set DMA mode
+	LDA #$18						; Set dest VRAM data write reg ($18 = $2118)
+	STA $4301
+	LDA #$01						; Set DMA channel
+	STA $420B						; Init DMA transfer
+
+	RTS
+
+SetupVideo:
+	LDA #$00
+	STA $2105						; Set video mode
+
+	LDA #$04						; BG1s starting tile address ($0400
+	STA $2107
+
+	STZ $210B						; BG1s character location ($0000)
+
+	LDA #$01
+	STA $212C						; Enable BG1
+
+	LDA #$FF						;TODO BG1 scroll registers? [JM]
+	STA $210E
+	STA $210E
+
+	LDA #$0F		; = 00001111
+	STA $2100		; Turn on screen using the Screen Display Register.
 
 	RTS
 
@@ -61,7 +115,7 @@ VBlank:
 ; ========
 ; Tiles
 ; ========
-.BANK 1
+.BANK 1 SLOT 0
 .ORG 0
 .SECTION "TileData"
 	.INCLUDE "Tiles.inc"
