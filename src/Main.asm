@@ -7,9 +7,8 @@
 ; ========
 ; Macros
 ; ========
-.MACRO LoadPalette
+.MACRO LoadPalette	; TODO: Take in arguments? [JM]
 	STZ $2100
-
 	LDA #:BG_Palette	; Bank address
 	LDX #BG_Palette		; Bank offset
 	LDY #(4*2)				; Bank length
@@ -27,8 +26,6 @@
 Start:
 	InitSystem
 	LoadPalette
-
-							; TODO: Set Acc to 8 bit?[JM]
 
 							; DOCS: Color is 16-bit, 0bbbbbgggggrrrrr. [JM]
 							; Split into 2 bytes, low byte(0bbbbbgg) and high byte (gggrrrrr).
