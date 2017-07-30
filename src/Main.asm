@@ -57,10 +57,15 @@ Start:
 
 Forever:
 	WAI								; Wait for interrupt
+	WAI
+	WAI
+	WAI
+	WAI
+	WAI
+	WAI
 
-	CLC								; Clear carry
-	ADC	#$04					; Add w/ carry
-	AND #$1C					; color > 28, make 0
+	LDA $0000
+	INA
 	STA $0000
 
 	JMP Forever
