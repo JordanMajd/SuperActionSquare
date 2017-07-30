@@ -48,19 +48,18 @@ Start:
 
 												; Draw sprite 1 to middle of screen
 	LDA #(256 / 2 - 16)		; Screen / 2 - half sprite
-	STA $0000							; Sprite X coord
+	STA $0000							; Sprite X coord, stored in RAM
 	LDA #(224 / 2 - 16)		; Screen / 2 - half sprite
-	STA $0001							; Sprite Y coord
+	STA $0001							; Sprite Y coord, stored in RAM
 
 
 	LDA #$02					; Tile 2 is the sprite
-	STA $0002					; Sprite starting tile #
-	LDA #$70
-	STA $0003					; VHOOPPPC (Vert, Horzontal, Order, Palette, Starting Tile #)
+	STA $0002					; Sprite starting tile #, stored in RAM
+	LDA #$70					; = 01110000
+	STA $0003					; VHOOPPPC (Vert, Horzontal, Order, Palette, Starting Tile #), stored in RAM
 
 	LDA #$54					; Clear
 	STA $0200					; Sprite X- MSB
-										; End draw sprite 1 to middle of screen
 
 										; Draw BG1 tile to screen
 										; TODO: Replace with Tilemap? [JM]
@@ -72,7 +71,6 @@ Start:
 
 	LDA #$01
 	STA $2118 				;	VRAM data write reg
-										; End Draw BG1 tile to screen
 
 	JSR SetupVideo
 
@@ -81,14 +79,12 @@ Start:
 
 Forever:
 	WAI									; Wait for interrupt
-	/*
+
 											; Cycle BG1 pal color
-											; Commented out because OAM is using $0000 RAM
-	LDA $0000 					; Load color from RAM
-	INA								; Increment
-	AND #$0F						; = 00001111
-	STA $0000					; Store color to RAM
-	*/
+	;LDA $0000 					; Load color from RAM
+	;INA								; Increment
+	;AND #$0F						; = 00001111
+	;STA $0000					; Store color to RAM
 
 	JMP Forever
 
@@ -131,7 +127,6 @@ SetupVideo:
 	STA $2101						; Use 32x32 sprites
 
 	LDA #$11						; Enable BG1 & Sprites
-	;LDA #$10						; Enable Sprites
 	STA $212C
 
 	LDA #$0F						; = 00001111
@@ -192,17 +187,14 @@ DMAPalette:
 	RTS
 
 VBlank
-
-	/*
 											; Set BG1 Pal color from RAM
-											; Commented for sprite impl
-	STZ $2115						; Set video mode
-	LDX #$0400					; Tile Address
-	STX $2116						; VRAM Write addr
+	;STZ $2115					; Set video mode
+	;LDX #$0400					; Tile Address
+	;STX $2116					; VRAM Write addr
 
-	LDA $0000						; Load color from RAM
-	STA $2119						; Write to VRAM
-	*/
+	;LDA $0000					; Load color from RAM
+	;STA $2119					; Write to VRAM
+
 
 	LDA $4210						; Clear NMI Flag
 
