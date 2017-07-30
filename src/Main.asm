@@ -38,14 +38,26 @@
 Start:
 	InitSystem
 
-	LoadPalette BGPalette, 0, 4
+	;LoadPalette BGPalette, 0, 4
 	LoadPalette SpritePalette, 128, 16
 
-	LoadBlockToVRAM Tiles, $0000, $0020
-	LoadBlockToVRAM Sprite, $0020, $0820
+	;LoadBlockToVRAM Tiles, $0000, $0020
+	LoadBlockToVRAM Sprite, $0000, $0800
 
 	JSR SetupSprites
 
+												; Draw sprite 1 to middle of screen
+	LDA #(256 / 2 - 16)		; Screen / 2 - half sprite
+	STA $0000							; Sprite X coord
+	LDA #(224 / 2 - 16)		; Screen / 2 - half sprite
+	STA $1001							; Sprite Y coord
+
+	LDA #$54					; Clear
+	STA $0200					; Sprite X- MSB
+										; End draw sprite 1 to middle of screen
+/*
+										; Draw BG1 tile to screen
+										; TODO: Replace with Tilemap? [JM]
 	LDA #$80					; = 10000000
 	STA $2115					; Init video port control reg, inc by 1
 
@@ -54,7 +66,8 @@ Start:
 
 	LDA #$01
 	STA $2118 				;	VRAM data write reg
-
+										; End Draw BG1 tile to screen
+*/
 	JSR SetupVideo
 
 	LDA #$80					; Enable NMI
@@ -63,28 +76,54 @@ Start:
 Forever:
 	WAI									; Wait for interrupt
 
-	LDA $0000 					; Load color from RAM
-	INA									; Increment
-	AND #$0F						; = 00001111
-	STA $0000						; Store color to RAM
+											; Cycle BG1 pal color
+											; Commented out because OAM is using $0000 RAM
+	;LDA $0000 					; Load color from RAM
+	;INA								; Increment
+	;AND #$0F						; = 00001111
+	;STA $0000					; Store color to RAM
 
 	JMP Forever
 
 SetupVideo:
+/*
 	STZ $2105						; Set video mode
 
-	LDA #$04						; BG1s starting tile address ($0400
+	LDA #$04						; BG1s starting tile address ($0400)
 	STA $2107
 
 	STZ $210B						; BG1s character location ($0000)
 
-	LDA #$01
-	STA $212C						; Enable BG1
+	LDA #$F0						; Vertical BG Scroll
+	STA $210E
+	LDA #$00
+	STA $210E
 
-	LDA #$F0						; Vertical BG Scroll? [JM]
-	STA $210E
-	LDA #$00						; Horizontal BG Scroll? [JM]
-	STA $210E
+	LDA #$F0						; Horizontal BG Scroll
+	STA $210D
+	LDA #$00
+	STA $210D
+*/
+											; DMA sprite data from RAM to OAM
+											; TODO: Macro or subroutine? [JM]
+											; TODO: Split writes into two lines to be explicit? [JM]
+  LDY #$0400					; Write $00 to $4300 & $04 to $4301
+	STY $4300						; CPU -> PPU, auto inc to $2104 (OAM Write reg)
+	STZ $4302						; DMA source bank
+	STZ $4303
+
+	LDA #$7E						; CPU address 7E:0000 - Work RAM
+	STA $4304						; DMA Offset
+	LDY #$0220
+	STY $4305						; DMA Size
+	LDA #$01
+	STA $420B						; Start Transfer
+
+	LDA #$A0
+	STA $2101						; Use 32x32 sprites
+
+	LDA #$11
+	STA $212C						; Enable BG1 & Sprites
 
 	LDA #$0F						; = 00001111
 	STA $2100						; Turn on screen using the Screen Display Register.
@@ -92,6 +131,27 @@ SetupVideo:
 	RTS
 
 SetupSprites:					; TODO: Set all sprites offscreen [JM]
+
+	LDX #$0000					; Loop through table one sprites ($0000 - $0200)
+	LDA #$01						;	To set their X coord to offscreen value
+_offscreen:
+	STA $0000, X				; Set X coordinate to -255
+	INX									; Increment by 4 bytes
+	INX									; TODO: This is stupid, must be better way [JM]
+	INX
+	INX
+	CPX #$0200
+	BNE _offscreen
+
+											; Loop through table two sprites ($0200 - $0220)
+	LDY #$5555					; To set their X SMB
+_setXMSB:
+	STY $0000, X				;	Set X coords SMB
+	INX									; Increment by 2 bytes
+	INX
+	CPX #$0220
+	BNE _setXMSB
+
 	RTS
 
 LoadVRAM:
@@ -123,12 +183,17 @@ DMAPalette:
 	RTS
 
 VBlank
+
+	/*
+											; Set BG1 Pal color from RAM
+											; Commented for sprite impl
 	STZ $2115						; Set video mode
 	LDX #$0400					; Tile Address
 	STX $2116						; VRAM Write addr
 
 	LDA $0000						; Load color from RAM
 	STA $2119						; Write to VRAM
+	*/
 
 	LDA $4210						; Clear NMI Flag
 
