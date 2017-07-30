@@ -52,6 +52,11 @@ Start:
 	LDA #(224 / 2 - 16)		; Screen / 2 - half sprite
 	STA $1001							; Sprite Y coord
 
+	;WTF DO THESE LINES DO
+	stz $0002
+	lda #%01110000
+	sta $0003
+
 	LDA #$54					; Clear
 	STA $0200					; Sprite X- MSB
 										; End draw sprite 1 to middle of screen
@@ -75,13 +80,14 @@ Start:
 
 Forever:
 	WAI									; Wait for interrupt
-
+	/*
 											; Cycle BG1 pal color
 											; Commented out because OAM is using $0000 RAM
-	;LDA $0000 					; Load color from RAM
-	;INA								; Increment
-	;AND #$0F						; = 00001111
-	;STA $0000					; Store color to RAM
+	LDA $0000 					; Load color from RAM
+	INA								; Increment
+	AND #$0F						; = 00001111
+	STA $0000					; Store color to RAM
+	*/
 
 	JMP Forever
 
@@ -112,18 +118,21 @@ SetupVideo:
 	STZ $4302						; DMA source bank
 	STZ $4303
 
-	LDA #$7E						; CPU address 7E:0000 - Work RAM
-	STA $4304						; DMA Offset
 	LDY #$0220
 	STY $4305						; DMA Size
+
+	LDA #$7E						; CPU address 7E:0000 - Work RAM
+	STA $4304						; DMA Offset
+
 	LDA #$01
 	STA $420B						; Start Transfer
 
 	LDA #$A0
 	STA $2101						; Use 32x32 sprites
 
-	LDA #$11
-	STA $212C						; Enable BG1 & Sprites
+	;LDA #$11						; Enable BG1 & Sprites
+	LDA #$10						; Enable Sprites
+	STA $212C
 
 	LDA #$0F						; = 00001111
 	STA $2100						; Turn on screen using the Screen Display Register.
@@ -206,8 +215,6 @@ VBlank
 .BANK 1 SLOT 0
 .ORG 0
 .SECTION "TileData"
-
-	.INCLUDE "Tiles.inc"
 
 Sprite:
 	.INCBIN "biker.pic"
