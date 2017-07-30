@@ -111,8 +111,8 @@ Init:
 
 	STZ $2131
 
-	;LDA #$E0
-	;STA $2132
+	LDA #$E0
+	STA $2132
 
 	STZ $2133
 	STZ $4200
