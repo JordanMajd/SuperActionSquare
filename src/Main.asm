@@ -56,21 +56,12 @@ Start:
 	STA $4200
 
 Forever:
-	WAI								; Wait for interrupt
-	WAI
-	WAI
-	WAI
-	WAI
-	WAI
-	WAI
-
-	LDA $0000 ;Flash color
-	INA
-	STA $0000
-
-	LDA $210E	;scroll
-	INA
-	STA $210E
+	WAI									; Wait for interrupt
+	
+	LDA $0000 					; Load color from RAM
+	INA									; Increment
+	AND #$0F						; = 00001111
+	STA $0000						; Store color to RAM
 
 	JMP Forever
 
@@ -87,7 +78,7 @@ SetupVideo:
 
 	LDA #$F0						; Vertical BG Scroll? [JM]
 	STA $210E
-	LDA #$0000					; Horizontal BG Scroll? [JM]
+	LDA #$00					; Horizontal BG Scroll? [JM]
 	STA $210E
 
 	LDA #$0F						; = 00001111
@@ -126,10 +117,10 @@ DMAPalette:
 
 VBlank
 	STZ $2115						; Set video mode
-	LDX #$0400					; Tile addr
+	LDX #$0400					; Tile Address
 	STX $2116						; VRAM Write addr
-	LDA $0000
 
+	LDA $0000						; Load color from RAM
 	STA $2119						; Write to VRAM
 
 	LDA $4210						; Clear NMI Flag
