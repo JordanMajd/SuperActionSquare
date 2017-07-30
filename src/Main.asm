@@ -42,12 +42,13 @@ Forever:
 
 DMAPalette:
 	 										;TODO: Preserve registers? [JM]
+
   STA	$4304						; Store data offset into DMA offset
   STX	$4302						; Store databank into DMA source bank
 	STY	$4305						; Store size of data block DMA
 
 	STZ $4300						; Set DMA mode
-	LDA #$22						; Set dest register ($2122 - CGRAM write)
+	LDA #$22						; Set dest CGRAM reg ($22 = $2122)
 	STA $4301
 	LDA #$01						; Init DMA transfer
 	STA $420B
