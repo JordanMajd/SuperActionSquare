@@ -64,12 +64,15 @@ Forever:
 	WAI
 	WAI
 
-	LDA $0000
+	LDA $0000 ;Flash color
 	INA
 	STA $0000
 
-	JMP Forever
+	LDA $210E	;scroll
+	INA
+	STA $210E
 
+	JMP Forever
 
 SetupVideo:
 	STZ $2105						; Set video mode
@@ -126,6 +129,7 @@ VBlank
 	LDX #$0400					; Tile addr
 	STX $2116						; VRAM Write addr
 	LDA $0000
+
 	STA $2119						; Write to VRAM
 
 	LDA $4210						; Clear NMI Flag
