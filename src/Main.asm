@@ -18,7 +18,6 @@
 .ENDM
 
 .MACRO LoadBlockToVRAM
-
 	LDX #\2					; Initial address for upload
 	STX $2116					; Set dest in VRAM Addr Reg
 
@@ -57,8 +56,7 @@ Forever:
 
 
 SetupVideo:
-	LDA #$00
-	STA $2105						; Set video mode
+	STZ $2105						; Set video mode
 
 	LDA #$04						; BG1s starting tile address ($0400
 	STA $2107
@@ -105,7 +103,6 @@ DMAPalette:
 	STA $420B						; Init DMA transfer
 
 	RTS
-
 .ENDS
 
 ; ========
@@ -113,6 +110,6 @@ DMAPalette:
 ; ========
 .BANK 1 SLOT 0
 .ORG 0
-.SECTION "CharacterData"
+.SECTION "TileData"
 	.INCLUDE "Tiles.inc"
 .ENDS
