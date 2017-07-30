@@ -51,13 +51,12 @@ Start:
 
 	JSR SetupVideo
 
-
 	LDA #$80					; Enable NMI
 	STA $4200
 
 Forever:
 	WAI									; Wait for interrupt
-	
+
 	LDA $0000 					; Load color from RAM
 	INA									; Increment
 	AND #$0F						; = 00001111
