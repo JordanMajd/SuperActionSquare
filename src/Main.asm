@@ -9,11 +9,11 @@
 ; ========
 .MACRO LoadPalette
 	STZ $2100
-	/*
+
 	LDA #:BG_Palette	; Bank address
 	LDX #BG_Palette		; Bank offset
 	LDY #(4*2)				; Bank length
-	*/
+
 	JSR DMAPalette
 .ENDM
 
@@ -45,7 +45,6 @@ Forever:
 
 DMAPalette:
 	 										;TODO: Preserve registers? [JM]
-	/*
   STA	$4304						; Store data offset into DMA offset
   STX	$4302						; Store databank into DMA source bank
 	STY	$4305						; Store size of data block DMA
@@ -55,7 +54,7 @@ DMAPalette:
 	STA $4301
 	LDA #$01						; Init DMA transfer
 	STA $420B
-	*/
+
 	RTS
 
 VBlank:

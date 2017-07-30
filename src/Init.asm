@@ -7,7 +7,7 @@
 	XCE								; 2. Exchange carry with emulation
 
 										; TODO: Is a starting 8 or 16 bits? [JM]
-	REP #$18					; =00011000. Set X, Y to 16 bit, decimal mode off.
+	REP #$18					; = 00011000. Set X, Y to 16 bit, decimal mode off.
 
 	JSR Init
 
@@ -17,7 +17,7 @@
 .ORG 0
 .SECTION "InitializeSystem" FREE ; See FREE, SEMIFREE and FORCE in WLA docs
 Init:
-	SEP #$30					; =0011000. Set A, X, Y to 8 bit.
+	SEP #$30					; = 00110000. Set A, X, Y to 8 bit.
 
 	LDA #$8F					; Force VBlank
 	STA $2100					; DOCS: See 2-27-1 for $2100 PPU Reg [JM]
@@ -70,7 +70,7 @@ Init:
 
 	; Good to here
 
-	STZ $211B				; TODO: Is the low/high byte backwards? [JM]
+	STZ $211B						; TODO: Is the low/high byte backwards? [JM]
 	LDA #$01
 	STA $211B
 
@@ -81,7 +81,7 @@ Init:
 	STZ $211D
 	STZ $211D
 
-	STZ $211E				; TODO: Is the low/high byte backwards? [JM]
+	STZ $211E						; TODO: Is the low/high byte backwards? [JM]
 	LDA #$01
 	STA $211E
 
@@ -134,6 +134,9 @@ Init:
 	STZ $420B
 	STZ $420C
 	STZ $420D
+
+	SEP	#$20							; = 00100000. Set A to 8 bit.
+	REP #$10 							; = 00010000. Set X, Y to 16 bit.
 
 	RTS
 .ENDS
