@@ -51,7 +51,18 @@ Start:
 
 	JSR SetupVideo
 
+
+	LDA #$80					; Enable NMI
+	STA $4200
+
 Forever:
+	WAI								; Wait for interrupt
+
+	CLC								; Clear carry
+	ADC	#$04					; Add w/ carry
+	AND #$1C					; color > 28, make 0
+	STA $0000
+
 	JMP Forever
 
 
@@ -68,11 +79,11 @@ SetupVideo:
 
 	LDA #$F0						; Vertical BG Scroll? [JM]
 	STA $210E
-	LDA #$00						; Horizontal BG Scroll? [JM]
+	LDA #$0000					; Horizontal BG Scroll? [JM]
 	STA $210E
 
-	LDA #$0F		; = 00001111
-	STA $2100		; Turn on screen using the Screen Display Register.
+	LDA #$0F						; = 00001111
+	STA $2100						; Turn on screen using the Screen Display Register.
 
 	RTS
 
@@ -106,6 +117,14 @@ DMAPalette:
 	RTS
 
 VBlank
+	STZ $2115						; Set video mode
+	LDX #$0400					; Tile addr
+	STX $2116						; VRAM Write addr
+	LDA $0000
+	STA $2119						; Write to VRAM
+
+	LDA $4210						; Clear NMI Flag
+
 	RTI
 .ENDS
 
