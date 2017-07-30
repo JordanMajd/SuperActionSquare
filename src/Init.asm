@@ -16,7 +16,7 @@
 
 .BANK 0 SLOT 0
 .ORG 0
-.SECTION "InitializeSystem" FREE ; See FREE, SEMIFREE and FORCE in WLA docs
+.SECTION "InitializeSystem" FREE		; DOCS: See FREE, SEMIFREE and FORCE in WLA docs
 Init:
 
 	PHP								; Push processor status register
