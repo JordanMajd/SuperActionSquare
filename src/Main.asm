@@ -42,7 +42,7 @@ Start:
 	LoadPalette SpritePalette, 128, 16
 
 	LoadBlockToVRAM Tiles, $0000, $0020
-	LoadBlockToVRAM Sprite, $0800, $0820
+	LoadBlockToVRAM Sprite, $0020, $0800
 
 	JSR SetupSprites
 
@@ -50,12 +50,13 @@ Start:
 	LDA #(256 / 2 - 16)		; Screen / 2 - half sprite
 	STA $0000							; Sprite X coord
 	LDA #(224 / 2 - 16)		; Screen / 2 - half sprite
-	STA $1001							; Sprite Y coord
+	STA $0001							; Sprite Y coord
 
-										;TODO: What do these do, didn't work without [JM]
-	stz $0002
-	lda #%01110000
-	sta $0003
+
+	LDA #$02
+	STA $0002					; Sprite starting tile #
+	LDA #%01110000
+	STA $0003					; VHOOPPPC (Vert, Horzontal, Order, Palette, Starting Tile #)
 
 	LDA #$54					; Clear
 	STA $0200					; Sprite X- MSB
@@ -92,7 +93,6 @@ Forever:
 	JMP Forever
 
 SetupVideo:
-
 	STZ $2105						; Set video mode
 
 	LDA #$04						; BG1s starting tile address ($0400)
@@ -109,20 +109,20 @@ SetupVideo:
 	STA $210D
 	LDA #$00
 	STA $210D
-
 											; DMA sprite data from RAM to OAM
 											; TODO: Macro or subroutine? [JM]
 											; TODO: Split writes into two lines to be explicit? [JM]
   LDY #$0400					; Write $00 to $4300 & $04 to $4301
 	STY $4300						; Set DMA Mode, dest PPU, auto inc
-	STZ $4302						; DMA source bank
-	STZ $4303
+
+	STZ $4302						; DMA Source Address Registers
+	STZ $4303						; DMA Source Address Registers
 
 	LDY #$0220
-	STY $4305						; DMA Size
+	STY $4305						; DMA Size Register (Low)
 
 	LDA #$7E						; CPU address 7E:0000 - Work RAM
-	STA $4304						; DMA Offset
+	STA $4304						; DMA Offset (Source Address Registers)
 
 	LDA #$01
 	STA $420B						; Start Transfer
@@ -131,6 +131,7 @@ SetupVideo:
 	STA $2101						; Use 32x32 sprites
 
 	LDA #$11						; Enable BG1 & Sprites
+	;LDA #$10						; Enable Sprites
 	STA $212C
 
 	LDA #$0F						; = 00001111
