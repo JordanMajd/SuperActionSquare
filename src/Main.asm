@@ -53,9 +53,9 @@ Start:
 	STA $0001							; Sprite Y coord
 
 
-	LDA #$02
+	LDA #$02					; Tile 2 is the sprite
 	STA $0002					; Sprite starting tile #
-	LDA #%01110000
+	LDA #$70
 	STA $0003					; VHOOPPPC (Vert, Horzontal, Order, Palette, Starting Tile #)
 
 	LDA #$54					; Clear
