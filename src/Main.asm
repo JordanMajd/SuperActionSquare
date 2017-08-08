@@ -222,5 +222,4 @@ Sprite:
   .INCBIN "biker.pic"
 SpritePalette:
   .INCBIN "biker.clr"
-
 .ENDS

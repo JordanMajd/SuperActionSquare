@@ -2,14 +2,14 @@
 ; Macros
 ; ========
 .MACRO InitSystem
-  SEI                ; Set interrupt disable flag.
+  SEI               ; Set interrupt disable flag.
 
                     ; SNES boots in 6502 emulation mode.
                     ; Set Native mode:
-  CLC                ; 1. Clear carry flag.
-  XCE                ; 2. Exchange carry with emulation
+  CLC               ; 1. Clear carry flag.
+  XCE               ; 2. Exchange carry with emulation
 
-  SEP  #$20          ; Set    00100000. Set A to 8 bit.
+  SEP  #$20         ; Set    00100000. Set A to 8 bit.
   REP #$18          ; Clear 00011000. Set X, Y to 16 bit, decimal mode off.
 
   JSR Init
@@ -25,23 +25,23 @@
 
 
 Init:
-  PHP                ; Push processor status register
+  PHP               ; Push processor status register
 
   SEP #$20          ; Set   00110000: Set A to 8 bit.
   REP #$10          ; Clear 00001000: Set X, Y to 16 bit
 
   LDA #$8F          ; Force VBlank
-  STA $2100          ; DOCS: See 2-27-1 for $2100 PPU Reg [JM]
+  STA $2100         ; DOCS: See 2-27-1 for $2100 PPU Reg [JM]
 
                     ; DOCS: See 2-26-1 for clearing registers
-  STZ $2101          ; Clear registers
+  STZ $2101         ; Clear registers
   STZ $2102
   STZ $2103
 
   ;STZ $2104        ; TODO: OAM Data? [kmw]
 
   LDX #$2105        ; TODO: Expand to start at 2101 without bugging on STZ $2104 [JM]
-_ClearReg0:          ; Clear $2105-$201C
+_ClearReg0:         ; Clear $2105-$201C
   STZ $0000,X
   INX
   CPX #$210D
@@ -65,7 +65,7 @@ _ClearReg1:          ; Clear $201D-$2114
 
   STZ $211A
 
-  STZ $211B          ; TODO: Is the low/high byte backwards? [JM]
+  STZ $211B         ; TODO: Is the low/high byte backwards? [JM]
   LDA #$01
   STA $211B
 
@@ -74,7 +74,7 @@ _ClearReg1:          ; Clear $201D-$2114
   STZ $211D
   STZ $211D
 
-  STZ $211E          ; TODO: Is the low/high byte backwards? [JM]
+  STZ $211E         ; TODO: Is the low/high byte backwards? [JM]
   LDA #$01
   STA $211E
 
