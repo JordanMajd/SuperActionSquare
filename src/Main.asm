@@ -6,10 +6,18 @@
 ; ========
 ; Macros
 ; ========
+
+;----------------------------------------------------------
+; Macro  | LoadPalette
+; 1      | Label of bank address
+; 2      | Address for upload
+; 3      | Bank size
+;----------------------------------------------------------
 .MACRO LoadPalette
   LDA #\2
   STA $2121
-  LDA #:\1          ; Bank address
+
+  LDA #:\1           ; Bank address
   LDX #\1            ; Bank offset
   LDY #(\3 * 2)      ; Bank length
 
@@ -30,7 +38,7 @@
   LDX #\1            ; Bank offset
   LDY #\3            ; Bank size (8 * color_depth(in bits) * number_of_characters)
 
-  JSR LoadVRAM
+  JSR DMAVRAM
 .ENDM
 
 ; ========
@@ -89,12 +97,6 @@ Start:
 
 Forever:
   WAI               ; Wait for interrupt
-
-                    ; Cycle BG1 pal color
-  ;LDA $0000        ; Load color from RAM
-  ;INA              ; Increment
-  ;AND #$0F         ; = 00001111
-  ;STA $0000        ; Store color to RAM
 
   JMP Forever
 
@@ -168,7 +170,7 @@ _setXMSB:
 
   RTS
 
-LoadVRAM:
+DMAVRAM:
   STX  $4302         ; Store databank into DMA source bank
   STA  $4304         ; Store data offset into DMA offset
   STY  $4305         ; Store size of data block DMA

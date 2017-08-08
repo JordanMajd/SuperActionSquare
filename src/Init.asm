@@ -22,8 +22,6 @@
 .ORG 0
 .SECTION "InitializeSystem" FREE
 
-
-
 Init:
   PHP               ; Push processor status register
 
