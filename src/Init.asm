@@ -9,8 +9,8 @@
 	CLC								; 1. Clear carry flag.
 	XCE								; 2. Exchange carry with emulation
 
-	SEP	#$20					; = 00100000. Set A to 8 bit.
-	REP #$18					; = 00011000. Set X, Y to 16 bit, decimal mode off.
+	SEP	#$20					; Set		00100000. Set A to 8 bit.
+	REP #$18					; Clear 00011000. Set X, Y to 16 bit, decimal mode off.
 
 	JSR Init
 .ENDM
@@ -20,11 +20,12 @@
 ; ========
 .BANK 0 SLOT 0
 .ORG 0
-.SECTION "InitializeSystem" FREE		; DOCS: See FREE, SEMIFREE and FORCE in WLA docs
+.SECTION "InitializeSystem" FREE
 Init:
 	PHP								; Push processor status register
 
-	SEP #$30					; = 00110000. Set A, X, Y to 8 bit.
+	SEP #$20					; Set 	00110000: Set A to 8 bit.
+	REP #$10					; Clear 00001000: Set X, Y to 16 bit
 
 	LDA #$8F					; Force VBlank
 	STA $2100					; DOCS: See 2-27-1 for $2100 PPU Reg [JM]
@@ -35,6 +36,9 @@ Init:
 	STZ $2103
 
 	;STZ $2104				; TODO: OAM Data? [kmw]
+
+	LDX #$1111
+	;STZ $00,X
 
 	STZ $2105
 	STZ $2106
