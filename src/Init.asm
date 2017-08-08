@@ -37,34 +37,19 @@ Init:
 
 	;STZ $2104				; TODO: OAM Data? [kmw]
 
-	LDX #$1111
-	;STZ $00,X
+	LDX #$2105				; TODO: Expand to start at 2101 without bugging on STZ $2104 [JM]
+_ClearReg0:					; Clear $2105-$201C
+	STZ $0000,X
+	INX
+	CPX #$210D
+	BNE _ClearReg0
 
-	STZ $2105
-	STZ $2106
-	STZ $2107
-	STZ $2108
-	STZ $2109
-	STZ $210A
-	STZ $210B
-	STZ $201C
-
-	STZ $210D					; clear low and high bytes [kmw]
-	STZ $210D
-	STZ $210E
-	STZ $210E
-	STZ $210F
-	STZ $210F
-	STZ $2110
-	STZ $2110
-	STZ $2111
-	STZ $2111
-	STZ $2112
-	STZ $2112
-	STZ $2113
-	STZ $2113
-	STZ $2114
-	STZ $2114
+_ClearReg1:					; Clear $201D-$2114
+	STZ $0000,X
+	STZ $0000,X
+	INX
+	CPX $2115
+	BNE _ClearReg1
 
 	LDA #$80
 	STA $2115
@@ -100,18 +85,12 @@ Init:
 
 	;STZ $2122				; TODO: CG Data? [JM]
 
-	STZ $2123
-	STZ $2124
-	STZ $2125
-	STZ $2126
-	STZ $2127
-	STZ $2128
-	STZ $2129
-	STZ $212A
-	STZ $212B
-	STZ $212C
-	STZ $212D
-	STZ $212E
+	LDX #$2123
+_ClearReg2					; Clear $2123-$212E
+	STZ $0000,X
+	INX
+	CPX #$212F
+	BNE _ClearReg2
 
 	LDA #$30
 	STA $2130
@@ -127,18 +106,12 @@ Init:
 	LDA #$FF
 	STA $4201
 
-	STZ $4202
-	STZ $4203
-	STZ $4204
-	STZ $4205
-	STZ $4206
-	STZ $4207
-	STZ $4208
-	STZ $4209
-	STZ $420A
-	STZ $420B
-	STZ $420C
-	STZ $420D
+	LDX #$4202
+_ClearReg3					; Clear $4202-$420D
+	STZ $0000,X
+	INX
+	CPX #$420E
+	BNE _ClearReg3
 
 	PLP								; Pull processor status register
 
