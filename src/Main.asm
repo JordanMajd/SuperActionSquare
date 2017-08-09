@@ -66,9 +66,11 @@ Start:
 
   ; TODO: Just clear all the RAM [JM]
   ; Clear controller RAM
-  STZ Joy1Raw
-  STZ Joy1Press
-  STZ Joy1Hold
+  LDX #$0000;
+  STX Joy1Raw
+  STX Joy1Press
+  STX Joy1Hold
+
   LoadBlockToVRAM  Init, $0000, $FFFF     ; Clear VRAM
                                           ; Init label is at $0000 (Bank 0, Slot 0)
                                           ; Write to start of VRAM
@@ -108,6 +110,8 @@ Start:
   STA $2118         ;  VRAM data write reg
 
   JSR SetupVideo
+
+  STZ $4016         ; Set NES Joypad Register to zero so we can detect if it is connected later.
 
   LDA #$81          ; Enable NMI and joypad read
   STA $4200
@@ -153,15 +157,19 @@ ReadInput:          ; DOCS: See 2-24-6 for joypad subroutine [JM]
 
   REP #$30          ; 16 bit
 
-  LDA $4218
-  STA Joy1Raw
-  TXA
-  EOR Joy1Raw
-  AND Joy1Raw
-  STA Joy1Press
-  TXA
-  AND Joy1Raw
-  STA Joy1Hold
+  LDX Joy1Raw       ; Load previous state
+  LDA $4218         ; Read joypad
+  STA Joy1Raw       ; Store current state
+  TXA               ; Transfer previous into A
+                    ; Get pressed buttons:
+  EOR Joy1Raw       ; 1. XOR previous with current
+  AND Joy1Raw       ; 2. AND with current
+  STA Joy1Press     ; 3. Store in RAM
+
+  TXA               ; Transfer previous into A
+                    ; Get held buttons:
+  AND Joy1Raw       ; 1. AND with current
+  STA Joy1Hold      ; 2. Store in RAM
 
                    ; TODO why doesn't PLP return to previous processor state? [JM]
   SEP #$20         ; Set   00100000. Set A to 8 bit.
@@ -277,7 +285,7 @@ DMAPalette:
   RTS
 
 VBlank
-  ;JMP ReadInput     ; TODO: ReadInput randomly blanks the scene[JM]
+  JMP ReadInput     ; TODO: ReadInput randomly blanks the scene[JM]
   LDA $4210          ; Clear NMI Flag
   RTI
 
